@@ -1,2 +1,2 @@
 # neuron_localization
-Code written for the final project in the course EITN65F
+Code written for the project in the course EITN65F
