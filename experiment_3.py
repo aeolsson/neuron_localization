@@ -102,7 +102,7 @@ for _ in range(1):
     archetype = sum(waveforms) / len(waveforms)
     
     noise_levels = np.linspace(0, 0.002, 11)
-    num_perturbations = 10
+    num_perturbations = 100
     archetypes_perturbed = []
     for sigma in noise_levels:
         archetypes_at_level = []
@@ -127,37 +127,37 @@ for _ in range(1):
     t_i = time.time()
     
     # Compare real and estimated waveforms
-    num_plot_signals = 5
-    selected_channels = np.random.choice(a=num_electrodes, size=num_plot_signals, replace=False)
-    selected_channels.sort()
-    F = plt.figure()
-    for i, e in enumerate(selected_channels):
-        for j, p in enumerate(np.arange(0, 11, 5)):
-            ax = F.add_subplot(num_plot_signals, 3, i*3 + j + 1)
-            ax.axis([0, 100, np.min(true_geometry.waveforms), np.max(true_geometry.waveforms)])
-            
-            if j == 0:
-                ax.set_ylabel('Electrode {}'.format(e+1), fontsize=15)
-            if i == 0:
-                ax.set_title('Perturbation {}'.format(p+1), fontsize=32)
-            
-            y_true = true_geometry.waveforms[e, 0, :]
-            y_est = archetypes_perturbed[p][0][e, :]
-            
-            if i==num_plot_signals-1 and j==1:
-                ax.plot(y_true, color='red', linewidth=2.5, zorder=1, label='True spike waveform')
-                ax.plot(y_est, color='blue', linewidth=2.5, linestyle='--', zorder=2, label='Estimated spike waveform')
-                
-                ax.legend(loc='lower center', ncol=2, bbox_to_anchor=(0.5, -0.75), fontsize=24, framealpha=1.0)
-            else:
-                ax.plot(y_true, color='red', linewidth=2.5, zorder=1)
-                ax.plot(y_est, color='blue', linestyle='--', linewidth=2.5, zorder=2)
-            
-
-            ax.set_xticks([])
-            ax.set_yticks([])
-    
-    plt.pause(1e-3)
+#    num_plot_signals = 5
+#    selected_channels = np.random.choice(a=num_electrodes, size=num_plot_signals, replace=False)
+#    selected_channels.sort()
+#    F = plt.figure()
+#    for i, e in enumerate(selected_channels):
+#        for j, p in enumerate(np.arange(0, 11, 5)):
+#            ax = F.add_subplot(num_plot_signals, 3, i*3 + j + 1)
+#            ax.axis([0, 100, np.min(true_geometry.waveforms), np.max(true_geometry.waveforms)])
+#            
+#            if j == 0:
+#                ax.set_ylabel('Electrode {}'.format(e+1), fontsize=15)
+#            if i == 0:
+#                ax.set_title('Perturbation {}'.format(p+1), fontsize=32)
+#            
+#            y_true = true_geometry.waveforms[e, 0, :]
+#            y_est = archetypes_perturbed[p][0][e, :]
+#            
+#            if i==num_plot_signals-1 and j==1:
+#                ax.plot(y_true, color='red', linewidth=2.5, zorder=1, label='True spike waveform')
+#                ax.plot(y_est, color='blue', linewidth=2.5, linestyle='--', zorder=2, label='Estimated spike waveform')
+#                
+#                ax.legend(loc='lower center', ncol=2, bbox_to_anchor=(0.5, -0.75), fontsize=24, framealpha=1.0)
+#            else:
+#                ax.plot(y_true, color='red', linewidth=2.5, zorder=1)
+#                ax.plot(y_est, color='blue', linestyle='--', linewidth=2.5, zorder=2)
+#            
+#
+#            ax.set_xticks([])
+#            ax.set_yticks([])
+#    
+#    plt.pause(1e-3)
     
     mean_errors = []
     std_errors = []
@@ -208,13 +208,13 @@ for _ in range(1):
     
     mean_errors = np.array(mean_errors)
     
-    x = 1000*noise_levels
+    x = 2500*noise_levels
     y = mean_errors
     
     F = plt.figure()
     ax = F.add_subplot(1, 1, 1)
-    ax.plot(x, y, linestyle='-', marker='o', color='black', linewidth=1.5, markersize=3.0)
-    ax.errorbar(x, y, yerr=std_errors)
+    ax.plot(x, y, linestyle='-', marker='o', color='black', linewidth=1.5, markersize=3.0, zorder=2)
+    ax.errorbar(x, y, yerr=std_errors, color='black', linewidth=1.5, zorder=1)
     ax.tick_params(axis='both', which='both', labelsize=24)
     
     ax.set_xlabel('Standard deviation of waveform-corrupting noise (uV)', fontsize=28)
